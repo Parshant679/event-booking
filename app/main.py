@@ -1,11 +1,12 @@
 from fastapi import FastAPI , Depends ,HTTPException
 
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from .database import Base,engine,SessionLocal
 
 from . import models , schemas
 
-from .tasks import send_booking_confirmations ,notify_event_updates
+from app.tasks import send_booking_confirmations ,notify_event_updates
 
 app = FastAPI()
 
@@ -36,8 +37,7 @@ def create_event(organizer_id:int,event: schemas.EventCreate ,db: Session = Depe
    db.add(db_event)
    db.commit()
    db.refresh(db_event) 
-
-from sqlalchemy import text
+   return db_event
 
 @app.post("/book/{user_id}")
 def book_ticket(user_id: int, booking: schemas.BookingCreate, db: Session = Depends(get_db)):
@@ -73,7 +73,7 @@ def book_ticket(user_id: int, booking: schemas.BookingCreate, db: Session = Depe
 def update_event(event_id:int ,event:schemas.EventCreate ,db:Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == event_id).first()
     if not user or user.role != "organizer":
-        raise HTTPException(status_code=403 ,detail="Only customers can update events")
+        raise HTTPException(status_code=403 ,detail="Only organizer can update events")
     if event.start_time > event.end_time:
         raise HTTPException(status_code=400 ,detail="Start time cannot be greater than end time")
     db_event = db.query(models.Event).filter(models.Event.id == event_id).first()
