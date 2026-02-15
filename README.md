@@ -196,7 +196,7 @@ docker buildx create --use
 ```bash
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  -t yourdockerhub/event-booking:latest \
+  -t parshant679/event-booking:latest \
   --push .
 ```
 
@@ -221,6 +221,7 @@ POST `/users`
 
 ```json
 {
+  "name" : "parshant"
   "email": "organizer@test.com",
   "password": "123",
   "role": "organizer"
@@ -235,6 +236,7 @@ POST `/users`
 
 ```json
 {
+  "name" : "parshant"
   "email": "customer@test.com",
   "password": "123",
   "role": "customer"
@@ -249,8 +251,14 @@ POST `/events/{organizer_id}`
 
 ```json
 {
-  "title": "Music Concert",
-  "total_tickets": 50
+  "organizer_id": 1,
+  "id": 1,
+  "end_time": 1771141247,
+  "available_tickets": 100000,
+  "title": "cactro",
+  "venue": "online",
+  "start_time": 1771141222,
+  "total_tickets": 100000
 }
 ```
 
