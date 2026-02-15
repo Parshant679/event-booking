@@ -126,6 +126,7 @@ sequenceDiagram
 erDiagram
     USERS {
         int id
+        string name
         string email
         string password
         string role
@@ -134,9 +135,12 @@ erDiagram
     EVENTS {
         int id
         string title
+        int organizer_id
+        string venue
+        int start_time
+        int end_time 
         int total_tickets
         int available_tickets
-        int organizer_id
     }
 
     BOOKINGS {
